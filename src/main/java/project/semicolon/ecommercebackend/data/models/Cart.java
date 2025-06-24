@@ -14,5 +14,5 @@ import java.util.List;
 public class Cart {
     private String userId;
     private List<CartItems> items;
-
+    private double totalPrice;
 }

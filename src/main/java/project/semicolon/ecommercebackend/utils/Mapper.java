@@ -7,14 +7,15 @@ import project.semicolon.ecommercebackend.dtos.Responses.CartResponse;
 
 public class Mapper {
 
-    public static CartItems mapToCartItems(CartRequest request){
+    public static CartItems mapToCartItems(CartRequest request) {
         CartItems items = new CartItems();
         items.setProductId(request.getProductId());
         items.setName(request.getName());
-        items.setQuality(request.getQuantity());
-        items.setPrice(String.valueOf(request.getPrice()));
+        items.setQuantity(request.getQuantity());
+        items.setPrice(request.getPrice());
         return items;
     }
+
 
     public static CartResponse mapToAddCartResponse(Cart cart) {
         CartResponse response = new CartResponse();

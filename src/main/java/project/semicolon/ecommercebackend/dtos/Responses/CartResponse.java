@@ -10,4 +10,5 @@ public class CartResponse {
     private String userId;
     private List<CartItems> items;
     private double totalPrice;
+    private String productId;
 }

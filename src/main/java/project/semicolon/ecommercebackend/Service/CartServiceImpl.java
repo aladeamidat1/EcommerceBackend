@@ -22,15 +22,15 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse addToCart(CartRequest request) {
         Optional<Cart> OptCart = cartRepository.findById(request.getUserId());
-        Cart cart = OptCart.orElse(new Cart(request.getUserId(), new ArrayList<>()));
+        Cart cart = OptCart.orElse(new Cart(request.getUserId(), new ArrayList<>(), 0.0));
 
         CartItems items = Mapper.mapToCartItems(request);
         addCartItem(cart, items);
 
+        updateTotalPrice(cart);
         Cart savedCart = cartRepository.save(cart);
         return Mapper.mapToAddCartResponse(savedCart);
     }
-
 
     @Override
     public CartResponse removeFromCart(String userId, String productId) {
@@ -53,15 +53,31 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cart);
     }
 
-    private void addCartItem(Cart cart, CartItems newItem){
-        boolean itemsIsEmpty = cart.getItems() == null;
+    private void updateTotalPrice(Cart cart) {
+        double total = cart.getItems().stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+        cart.setTotalPrice(total);
+    }
 
-        if(itemsIsEmpty) cart.setItems(new ArrayList<>());
+    private void addCartItem(Cart cart, CartItems newItem) {
+        if (cart.getItems() == null) {
+            cart.setItems(new ArrayList<>());
+        }
+
         List<CartItems> items = cart.getItems();
+        boolean itemExists = false;
 
-        for(CartItems item : items){
-            boolean checkIfItAlreadyExist = item.getProductId().equals(newItem.getProductId());
-           if(checkIfItAlreadyExist) item.setQuality(item.getQuality() + newItem.getQuality());
+        for (CartItems item : items) {
+            if (item.getProductId().equals(newItem.getProductId())) {
+                item.setQuantity(item.getQuantity() + newItem.getQuantity());
+                itemExists = true;
+                break;
+            }
+        }
+
+        if (!itemExists) {
+            items.add(newItem);
         }
     }
 }

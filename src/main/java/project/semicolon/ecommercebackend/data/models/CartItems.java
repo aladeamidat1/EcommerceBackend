@@ -6,6 +6,6 @@ import lombok.Data;
 public class CartItems {
     private String productId;
     private String name;
-    private int quality;
-    private String price;
+    private int quantity;
+    private double price;
 }
