@@ -2,8 +2,9 @@ package project.semicolon.ecommercebackend.Enums;
 
 public enum Role {
     CUSTOMER,
-    VENDOR;
+    VENDOR, SELLER;
 
-    public static interface OrderService {
-    }
+
+
+
 }
