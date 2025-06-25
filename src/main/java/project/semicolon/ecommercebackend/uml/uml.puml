@@ -1,0 +1,190 @@
+@startuml
+skinparam style strictuml
+skinparam linetype ortho
+
+' ==== Enumerations ====
+enum Role {
+  CUSTOMER
+  SELLER
+}
+
+enum Category {
+  OTHER
+  ELECTRONICS
+  TOYS
+  FASHION
+  BOOKS
+  GROCERIES
+  HOME
+  BEAUTY
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  DELIVERED
+  SHIPPED
+  CANCELLED
+}
+
+' ==== Core User Domain ====
+class User {
+  - id: String
+  - firstName: String
+  - lastName: String
+  - email: String
+  - password: String
+  - phoneNumber: String
+  - role: Role
+  - createdAt: LocalDateTime
+  - updatedAt: LocalDateTime
+  - isActive: boolean
+}
+
+class Customer {
+  - cartId: String
+  - orderIds: List<String>
+  - address: String
+}
+
+class Seller {
+  - productIds: List<String>
+  - orderIds: List<String>
+}
+
+User <|-- Customer
+User <|-- Seller
+
+' ==== Product Domain ====
+class Product {
+  - id: String
+  - name: String
+  - price: double
+  - description: String
+  - quantity: int
+}
+
+' ==== Cart Domain ====
+class Cart {
+  - items: List<CartItem>
+  - userId: String
+  - totalPrice: double
+}
+
+class CartItem {
+  - name: String
+  - quantity: int
+  - price: double
+  - productId: String
+}
+
+Cart "1" *-- "many" CartItem
+CartItem --> Product
+
+' ==== Order Domain ====
+class Order {
+  - orderId: String
+  - userId: String
+  - items: List<OrderItems>
+  - deliveryAddress: String
+  - createdAt: LocalDateTime
+  - totalPrice: double
+  - status: String
+}
+
+class OrderItems {
+  - price: double
+  - quantity: int
+  - name: String
+  - productId: String
+}
+
+Order "1" *-- "many" OrderItems
+OrderItems --> Product
+
+Customer --> Cart
+Customer --> Order
+Seller --> Product
+Seller --> Order
+
+' ==== DTOs ====
+class CartRequest
+class CartResponse
+class OrderRequest
+class OrderResponse
+class RegisterRequest
+class RegisterResponse
+class LoginRequest
+class LoginResponse
+class UserRequest
+class UserResponse
+
+' ==== Exceptions ====
+class EmailAlreadyExistException
+class InvalidEmailException
+class InvalidFullNameException
+class PhoneNumberAlreadyExistException
+
+' ==== Controllers ====
+class UserController
+class CustomerController
+class SellerController
+class CartController
+class OrderController
+class ProductController
+
+' ==== Services ====
+interface UserService
+class UserServiceImpl
+interface CustomerService
+class CustomerServiceImpl
+interface SellerService
+class SellerServiceImpl
+interface CartService
+class CartServiceImpl
+interface OrderService
+class OrderServiceImpl
+interface ProductService
+class ProductServiceImpl
+
+UserController --> UserService
+UserServiceImpl ..|> UserService
+
+CustomerController --> CustomerService
+CustomerServiceImpl ..|> CustomerService
+
+SellerController --> SellerService
+SellerServiceImpl ..|> SellerService
+
+CartController --> CartService
+CartServiceImpl ..|> CartService
+
+OrderController --> OrderService
+OrderServiceImpl ..|> OrderService
+
+ProductController --> ProductService
+ProductServiceImpl ..|> ProductService
+
+' ==== Repositories ====
+interface UserRepository
+interface CustomerRepository
+interface SellerRepository
+interface CartRepository
+interface OrderRepository
+interface ProductRepository
+interface CartItemRepository
+
+UserServiceImpl --> UserRepository
+CustomerServiceImpl --> CustomerRepository
+SellerServiceImpl --> SellerRepository
+CartServiceImpl --> CartRepository
+OrderServiceImpl --> OrderRepository
+ProductServiceImpl --> ProductRepository
+
+' ==== Other ====
+class Mapper
+class WebConfig
+class ECommerceBackendApplication
+class ECommerceBackendApplicationTests
+
+@enduml
