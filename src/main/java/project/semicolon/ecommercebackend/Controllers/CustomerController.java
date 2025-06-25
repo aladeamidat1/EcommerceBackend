@@ -8,7 +8,7 @@ import project.semicolon.ecommercebackend.data.models.Customer;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api")
 public class CustomerController {
 
     @Autowired

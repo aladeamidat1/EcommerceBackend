@@ -1,17 +1,17 @@
 package project.semicolon.ecommercebackend.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import project.semicolon.ecommercebackend.data.models.Order;
-import project.semicolon.ecommercebackend.data.models.OrderItems;
 import project.semicolon.ecommercebackend.data.repository.OrderRepository;
 import project.semicolon.ecommercebackend.dtos.Requests.OrderRequest;
 import project.semicolon.ecommercebackend.dtos.Responses.OrderResponse;
 import project.semicolon.ecommercebackend.utils.Mapper;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -31,12 +31,11 @@ public class OrderServiceImpl implements OrderService {
         return Mapper.mapToOrderResponse(savedOrder);
     }
 
-
     @Override
     public OrderResponse findOrderById(String userId) {
-        Optional<Order> OptOrder = orderRepository.findById(userId);
-
-        if(OptOrder.isPresent())
-
+        Optional<Order> optOrder = orderRepository.findById(userId);
+        return optOrder.map(Mapper::mapToOrderResponse)
+                .orElseThrow(() -> new RuntimeException("Order not found for user: " + userId));
     }
+
 }

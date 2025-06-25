@@ -3,7 +3,7 @@ package project.semicolon.ecommercebackend.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.semicolon.ecommercebackend.data.models.Cart;
-import project.semicolon.ecommercebackend.data.models.CartItems;
+import project.semicolon.ecommercebackend.data.models.CartItem;
 import project.semicolon.ecommercebackend.data.repository.CartRepository;
 import project.semicolon.ecommercebackend.dtos.Requests.CartRequest;
 import project.semicolon.ecommercebackend.dtos.Responses.CartResponse;
@@ -24,7 +24,7 @@ public class CartServiceImpl implements CartService {
         Optional<Cart> OptCart = cartRepository.findById(request.getUserId());
         Cart cart = OptCart.orElse(new Cart(request.getUserId(), new ArrayList<>(), 0.0));
 
-        CartItems items = Mapper.mapToCartItems(request);
+        CartItem items = Mapper.mapToCartItems(request);
         addCartItem(cart, items);
 
         updateTotalPrice(cart);
@@ -37,7 +37,7 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("user not found"));
 
-        List<CartItems> items = cart.getItems();
+        List<CartItem> items = cart.getItems();
         items.removeIf(item -> item.getProductId().equals(productId));
 
         Cart updateCart = cartRepository.save(cart);
@@ -60,15 +60,15 @@ public class CartServiceImpl implements CartService {
         cart.setTotalPrice(total);
     }
 
-    private void addCartItem(Cart cart, CartItems newItem) {
+    private void addCartItem(Cart cart, CartItem newItem) {
         if (cart.getItems() == null) {
             cart.setItems(new ArrayList<>());
         }
 
-        List<CartItems> items = cart.getItems();
+        List<CartItem> items = cart.getItems();
         boolean itemExists = false;
 
-        for (CartItems item : items) {
+        for (CartItem item : items) {
             if (item.getProductId().equals(newItem.getProductId())) {
                 item.setQuantity(item.getQuantity() + newItem.getQuantity());
                 itemExists = true;
