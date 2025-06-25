@@ -4,6 +4,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import project.semicolon.ecommercebackend.data.models.Product;
 
 public interface ProductRepository extends MongoRepository<Product, String> {
+<<<<<<< HEAD
+=======
 
     // Additional query methods can be defined here if needed
+>>>>>>> origin/main
 }
