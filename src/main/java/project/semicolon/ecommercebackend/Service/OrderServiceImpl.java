@@ -9,6 +9,7 @@ import project.semicolon.ecommercebackend.dtos.Responses.OrderResponse;
 import project.semicolon.ecommercebackend.utils.Mapper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public class OrderServiceImpl implements OrderService {
@@ -33,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse findOrderById(String userId) {
-        List<OrderItems> order = orderRepository.findById(userId);
+        Optional<Order> order = orderRepository.findById(userId);
 
     }
 }
