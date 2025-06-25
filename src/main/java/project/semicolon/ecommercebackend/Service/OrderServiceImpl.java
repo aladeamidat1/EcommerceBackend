@@ -34,7 +34,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse findOrderById(String userId) {
-        Optional<Order> order = orderRepository.findById(userId);
+        Optional<Order> OptOrder = orderRepository.findById(userId);
+
+        if(OptOrder.isPresent())
 
     }
 }
