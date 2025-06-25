@@ -2,6 +2,7 @@ package project.semicolon.ecommercebackend.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import project.semicolon.ecommercebackend.Exceptions.EmailAlreadyExistException;
 import project.semicolon.ecommercebackend.Exceptions.InvalidEmailException;
 import project.semicolon.ecommercebackend.Service.UserService;
 import project.semicolon.ecommercebackend.dtos.Requests.LoginRequest;
@@ -17,7 +18,7 @@ public class UserController {
 
     @PostMapping("/register")
     public RegisterResponse register(@RequestBody RegisterRequest registerRequest)
-            throws InvalidEmailException {
+            throws InvalidEmailException, EmailAlreadyExistException {
         return userService.register(registerRequest);
     }
 

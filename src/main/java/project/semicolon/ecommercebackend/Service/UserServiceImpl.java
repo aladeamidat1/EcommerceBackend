@@ -28,33 +28,27 @@ public class UserServiceImpl implements UserService {
     private SellerRepository sellerRepository;
 
     @Override
-    public RegisterResponse register(RegisterRequest registerRequest) {
-        try {
-            isUserRegistered(registerRequest);
+    public RegisterResponse register(RegisterRequest registerRequest) throws EmailAlreadyExistException, InvalidEmailException {
+//            isUserRegistered(registerRequest);
             User user = Mapper.mapToUser(registerRequest);
             User savedUser = userRepository.save(user);
             return Mapper.getRegisterResponse(savedUser);
-        } catch (EmailAlreadyExistException | PhoneNumberAlreadyExistException | InvalidEmailException e) {
-            throw new RuntimeException(e.getMessage());
         }
-    }
 
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        User user = userRepository.findUsersByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (!user.getPassword().equals(loginRequest.getPassword())) {
-            throw new RuntimeException("Invalid password");
-        }
-
         LoginResponse response = new LoginResponse();
-        response.setMessage("Login successful");
-        response.setRole(user.getRole().toString());
+        User user = userRepository.findUsersByEmail(loginRequest.getEmail())
+                .orElseThrow();
+
+        if (user.getPassword().equals(loginRequest.getPassword())) {
+            response.setMessage("Login successful");
+        } else {
+            response.setMessage("Invalid email or password");
+        }
         return response;
     }
-
     @Override
     public void logout(String email) {
         if (email == null || email.trim().isEmpty())

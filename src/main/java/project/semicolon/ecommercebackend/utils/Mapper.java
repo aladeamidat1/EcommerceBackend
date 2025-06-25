@@ -16,6 +16,7 @@ public class Mapper {
         user.setPassword(registerRequest.getPassword());
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
+        user.setPhoneNumber(registerRequest.getPhoneNumber());
         user.setRole(registerRequest.getRole());
         return user;
     }
@@ -23,11 +24,6 @@ public class Mapper {
     public static RegisterResponse getRegisterResponse(User savedUser) {
         RegisterResponse response = new RegisterResponse();
         response.setId(savedUser.getId());
-        response.setEmail(savedUser.getEmail());
-        response.setFirstName(savedUser.getFirstName());
-        response.setLastName(savedUser.getLastName());
-        response.setPhoneNumber(savedUser.getPhoneNumber());
-        response.setRole(savedUser.getRole().toString());
         response.setMessage("User registered successfully");
         return response;
     }
@@ -48,10 +44,9 @@ public class Mapper {
     }
 
     private static void validatePhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.trim().isEmpty())
-            throw new RuntimeException("Phone number cannot be empty");
-        if (!phoneNumber.matches("^\\+?[0-9]{7,15}$"))
-            throw new RuntimeException("Invalid phone number format");
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) throw new RuntimeException("Phone number cannot be empty");
+        if (phoneNumber.length() != 11) throw new RuntimeException("Phone number must be 11 digits");
+        if (!phoneNumber.matches("^\\+?[0-9]{7,15}$")) throw new RuntimeException("Invalid phone number format");
     }
 
     private static void validateFirstName(String firstName) {
@@ -69,7 +64,7 @@ public class Mapper {
             throw new RuntimeException("Role cannot be null");
     }
 
-    public static User mapToUser(RegisterRequest registerRequest) throws InvalidEmailException {
+    public static User  mapToUser(RegisterRequest registerRequest) throws InvalidEmailException {
         return RegisterRequestToUser(registerRequest);
     }
 }
