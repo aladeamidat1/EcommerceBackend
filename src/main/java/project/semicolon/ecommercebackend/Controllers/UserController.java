@@ -19,7 +19,7 @@ public class UserController {
     @PostMapping("/register")
     public RegisterResponse register(@RequestBody RegisterRequest registerRequest)
             throws InvalidEmailException, EmailAlreadyExistException {
-        return userService.register(registerRequest);
+        return userService.register (registerRequest);
     }
 
     @PostMapping("/login")

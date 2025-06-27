@@ -2,18 +2,11 @@ package project.semicolon.ecommercebackend.utils;
 
 import project.semicolon.ecommercebackend.Enums.Role;
 import project.semicolon.ecommercebackend.Exceptions.InvalidEmailException;
-import project.semicolon.ecommercebackend.data.models.Cart;
-import project.semicolon.ecommercebackend.data.models.CartItem;
-import project.semicolon.ecommercebackend.data.models.Order;
 import project.semicolon.ecommercebackend.data.models.User;
-import project.semicolon.ecommercebackend.dtos.Requests.CartRequest;
-import project.semicolon.ecommercebackend.dtos.Requests.OrderRequest;
 import project.semicolon.ecommercebackend.dtos.Requests.RegisterRequest;
-import project.semicolon.ecommercebackend.dtos.Responses.CartResponse;
-import project.semicolon.ecommercebackend.dtos.Responses.OrderResponse;
 import project.semicolon.ecommercebackend.dtos.Responses.RegisterResponse;
 
-public class Mapper {
+public class UserMapper {
 
     public static User RegisterRequestToUser(RegisterRequest registerRequest) throws InvalidEmailException {
         isValidUser(registerRequest);
@@ -31,6 +24,11 @@ public class Mapper {
     public static RegisterResponse getRegisterResponse(User savedUser) {
         RegisterResponse response = new RegisterResponse();
         response.setId(savedUser.getId());
+        response.setEmail(savedUser.getEmail());
+        response.setFirstName(savedUser.getFirstName());
+        response.setLastName(savedUser.getLastName());
+        response.setPhoneNumber(savedUser.getPhoneNumber());
+        response.setRole(String.valueOf(savedUser.getRole()));
         response.setMessage("User registered successfully");
         return response;
     }
@@ -75,42 +73,4 @@ public class Mapper {
     public static User mapToUser(RegisterRequest registerRequest) throws InvalidEmailException {
         return RegisterRequestToUser(registerRequest);
     }
-
-
-    public static CartItem mapToCartItems(CartRequest request) {
-        CartItem items = new CartItem();
-        items.setProductId(request.getProductId());
-        items.setName(request.getName());
-        items.setQuantity(request.getQuantity());
-        items.setPrice(request.getPrice());
-        return items;
-    }
-
-    public static CartResponse mapToAddCartResponse(Cart cart) {
-        CartResponse response = new CartResponse();
-        response.setUserId(cart.getUserId());
-        response.setItems(cart.getItems());
-        response.setTotalPrice(cart.getTotalPrice());
-        return response;
-    }
-
-    public static Order mapToOrder(OrderRequest request) {
-        Order order = new Order();
-        order.setUserid(request.getUserId());
-        order.setTotalPrice(request.getPrice());
-        order.setItems(request.getItems());
-        return order;
-    }
-
-    public static OrderResponse mapToOrderResponse(Order order) {
-        OrderResponse response = new OrderResponse();
-        response.setUserId(order.getUserid());
-        response.setOrderId(order.getOrderId());
-        response.setCreatedAt(order.getCreatedAt());
-        response.setDeliveryAddress(order.getDeliveryAddress());
-        response.setTotalPrice(order.getTotalPrice());
-        response.setItems(order.getItems());
-        return response;
-    }
-
 }

@@ -13,7 +13,7 @@ import project.semicolon.ecommercebackend.dtos.Requests.LoginRequest;
 import project.semicolon.ecommercebackend.dtos.Requests.RegisterRequest;
 import project.semicolon.ecommercebackend.dtos.Responses.LoginResponse;
 import project.semicolon.ecommercebackend.dtos.Responses.RegisterResponse;
-import project.semicolon.ecommercebackend.utils.Mapper;
+import project.semicolon.ecommercebackend.utils.UserMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,9 +30,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) throws EmailAlreadyExistException, InvalidEmailException {
 //            isUserRegistered(registerRequest);
-            User user = Mapper.mapToUser(registerRequest);
+            User user = UserMapper.mapToUser(registerRequest);
             User savedUser = userRepository.save(user);
-            return Mapper.getRegisterResponse(savedUser);
+            return UserMapper.getRegisterResponse(savedUser);
         }
 
 
