@@ -3,10 +3,8 @@ package project.semicolon.ecommercebackend.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.semicolon.ecommercebackend.data.models.Product;
-import project.semicolon.ecommercebackend.data.repository.CartRepository;
 import project.semicolon.ecommercebackend.data.repository.ProductRepository;
-import project.semicolon.ecommercebackend.dtos.Requests.ProductRequest;
-import project.semicolon.ecommercebackend.dtos.Responses.ProductResponse;
+import project.semicolon.ecommercebackend.dtos.Responses.CreateProductResponse;
 import project.semicolon.ecommercebackend.utils.ProductMapper;
 
 import java.util.List;
@@ -19,11 +17,11 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductResponse createProduct(ProductRequest request) {
+    public CreateProductResponse createProduct(ProductRequest request) {
         Product product = ProductMapper.toProduct(request);
         Product savedProduct = productRepository.save(product);
 
-        ProductResponse response = new ProductResponse();
+        CreateProductResponse response = new CreateProductResponse();
         response.setId(savedProduct.getId());
         response.setName(savedProduct.getName());
         response.setMessage("Product created successfully");
@@ -32,10 +30,10 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductResponse getProductById(String id) {
+    public CreateProductResponse getProductById(String id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        ProductResponse response = new ProductResponse();
+        CreateProductResponse response = new CreateProductResponse();
         response.setId(product.getId());
         response.setName(product.getName());
         response.setMessage("Product retrieved successfully");
@@ -43,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse updateProduct(String id, ProductRequest request) {
+    public CreateProductResponse updateProduct(String id, ProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         product.setName(request.getName());
@@ -53,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(project.semicolon.ecommercebackend.Enums.Category.valueOf(request.getCategory().toUpperCase()));
         Product updatedProduct = productRepository.save(product);
 
-        ProductResponse response = new ProductResponse();
+        CreateProductResponse response = new CreateProductResponse();
         response.setId(updatedProduct.getId());
         response.setName(updatedProduct.getName());
         response.setMessage("Product updated successfully");
@@ -70,9 +68,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getAllProducts() {
+    public List<CreateProductResponse> getAllProducts() {
         return productRepository.findAll().stream().map(product -> {
-            ProductResponse response = new ProductResponse();
+            CreateProductResponse response = new CreateProductResponse();
             response.setId(product.getId());
             response.setName(product.getName());
             response.setMessage("Product retrieved successfully");
@@ -81,12 +79,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getProductsByCategory(String category) {
+    public List<CreateProductResponse> getProductsByCategory(String category) {
         var cat = project.semicolon.ecommercebackend.Enums.Category.valueOf(category.toUpperCase());
         return productRepository.findAll().stream()
                 .filter(product -> product.getCategory() == cat)
                 .map(product -> {
-                    ProductResponse response = new ProductResponse();
+                    CreateProductResponse response = new CreateProductResponse();
                     response.setId(product.getId());
                     response.setName(product.getName());
                     response.setMessage("Product retrieved successfully");
