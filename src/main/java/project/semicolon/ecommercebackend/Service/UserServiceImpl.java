@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) throws EmailAlreadyExistException, InvalidEmailException {
-//            isUserRegistered(registerRequest);
+            isUserRegistered(registerRequest);
             User user = Mapper.mapToUser(registerRequest);
             User savedUser = userRepository.save(user);
             return Mapper.getRegisterResponse(savedUser);

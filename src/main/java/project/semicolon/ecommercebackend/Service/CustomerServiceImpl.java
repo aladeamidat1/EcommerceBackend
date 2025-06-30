@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<String> orders = customer.getOrderIds() == null ? new ArrayList<>() : customer.getOrderIds();
         orders.addAll(cart);
         customer.setOrderIds(orders);
-        customer.setCartId(""); // clear cart
+        customer.setCartId("");
         customerRepository.save(customer);
     }
 

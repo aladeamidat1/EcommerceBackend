@@ -12,5 +12,4 @@ public interface CustomerService {
     List<String> viewCart(String customerEmail);
     void placeOrder(String customerEmail);
     List<String> viewOrders(String customerEmail);
-
 }
